@@ -1,14 +1,23 @@
 # mosho global
 
-React / Express / tRPC / Drizzle starter, adapted from the Sandbox web-db-user template.
+Modern responsive website for a mobile phone charging station business.
 
-- `pnpm dev`: development server; honors `PORT` (default 3000).
-- `pnpm build` / `pnpm start`: build and serve `dist/index.js` and `dist/public/`.
-- `pnpm db:migrate`: apply checked-in migrations. `pnpm db:push`: generate and apply new schema changes.
-- `pnpm check` / `pnpm test`: types and application tests.
+## Run locally
 
-Start with the Webdev skill's default-template guide. Platform login, storage, payments and service contracts live in its shared references; read the relevant capability before extending its helper.
+This is a React/Vite + Express project. Do **not** open `client/index.html` directly in a browser; the absolute asset paths and `/api/platform/config.js` require the development server.
 
-`server/_core/publicConfig.ts` exposes only named public runtime values. Private keys stay server-side. The platform serves managed `/manus-storage/` assets; the application does not register a second proxy.
+```bash
+pnpm install
+pnpm dev
+```
 
-Platform configuration is readable and editable through `webdev.config`. Default settings are initial values, not enforced constraints. The agent may modify the files, commands and configuration or follow the flexible guide for another stack.
+Then open [http://localhost:3000](http://localhost:3000).
+
+## Validate and build
+
+```bash
+pnpm check
+pnpm build
+```
+
+The project uses the managed Webdev starter with React, Express, tRPC, Drizzle, and a MySQL-compatible database configuration. The current visual reservation and availability interactions work in the browser session; replace the starter location, phone number, and availability values before production use.
