@@ -1,0 +1,6 @@
+project_id = "mosho-global"
+
+# Paystack calls this endpoint without a Supabase login; it is authenticated
+# by the signature check inside the function instead.
+[functions.paystack-webhook]
+verify_jwt = false

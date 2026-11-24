@@ -1,42 +1,44 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import Layout from "@/components/Layout";
+import { AuthProvider } from "@/lib/auth";
+import { isConfigured } from "@/lib/supabase";
+import CheckoutComplete from "@/pages/CheckoutComplete";
+import Dashboard from "@/pages/Dashboard";
+import EventPage from "@/pages/EventPage";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import ManageEvent from "@/pages/ManageEvent";
+import NewEvent from "@/pages/NewEvent";
+import NotFound from "@/pages/NotFound";
+import Tickets from "@/pages/Tickets";
 
-function Router() {
-  // make sure to consider if you need authentication for certain routes
+export default function App() {
+  if (!isConfigured) {
+    return (
+      <main className="wrap narrow">
+        <div className="notice error">
+          <strong>Setup needed.</strong> Add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> to
+          your environment (see <code>.env.example</code>), then rebuild.
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <AuthProvider>
+      <Layout>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/events/:slug">{(p) => <EventPage slug={p.slug} />}</Route>
+          <Route path="/login" component={Login} />
+          <Route path="/tickets" component={Tickets} />
+          <Route path="/checkout/complete" component={CheckoutComplete} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard/new" component={NewEvent} />
+          <Route path="/dashboard/events/:id">{(p) => <ManageEvent id={p.id} />}</Route>
+          <Route component={NotFound} />
+        </Switch>
+      </Layout>
+    </AuthProvider>
   );
 }
-
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
