@@ -4,12 +4,14 @@ import { AuthProvider } from "@/lib/auth";
 import { isConfigured } from "@/lib/supabase";
 import CheckoutComplete from "@/pages/CheckoutComplete";
 import Dashboard from "@/pages/Dashboard";
+import EditEvent from "@/pages/EditEvent";
 import EventPage from "@/pages/EventPage";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import ManageEvent from "@/pages/ManageEvent";
 import NewEvent from "@/pages/NewEvent";
 import NotFound from "@/pages/NotFound";
+import ResetPassword from "@/pages/ResetPassword";
 import Tickets from "@/pages/Tickets";
 
 export default function App() {
@@ -35,7 +37,9 @@ export default function App() {
           <Route path="/checkout/complete" component={CheckoutComplete} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/dashboard/new" component={NewEvent} />
+          <Route path="/dashboard/events/:id/edit">{(p) => <EditEvent id={p.id} />}</Route>
           <Route path="/dashboard/events/:id">{(p) => <ManageEvent id={p.id} />}</Route>
+          <Route path="/reset-password" component={ResetPassword} />
           <Route component={NotFound} />
         </Switch>
       </Layout>

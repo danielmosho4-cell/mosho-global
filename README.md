@@ -28,6 +28,35 @@ pnpm dev                 # http://localhost:3000
 3. In Supabase, open Authentication, then URL Configuration, and set **Site URL** to your Vercel address. Add the same
    address under **Redirect URLs**. Without this, email confirmation links won't return to your site.
 
+## Sign-in setup (Supabase)
+
+Sign-in, sign-up, "Resend confirmation email" and "Forgot your password?" are built in. For the email links to work:
+
+1. Authentication, then URL Configuration: set **Site URL** to your live address and add it under **Redirect URLs**
+   (also add `https://YOUR-ADDRESS/reset-password`).
+2. Supabase's built-in email sender allows only a few emails per hour. For real use, add your own SMTP provider under
+   Authentication, then Emails, then SMTP Settings.
+3. To let people sign up without confirming their email (easier while testing), turn off **Confirm email** under
+   Authentication, then Sign In / Providers, then Email.
+4. Turn on **Leaked password protection** under Authentication, then Password security.
+
+## Deploy from the zip
+
+Vercel's website doesn't accept zip uploads. Use either way:
+
+- **Command line (uses the zip directly):** unzip, open a terminal in the folder, then run
+  `npx vercel` (first deploy) and `npx vercel --prod` (live). When asked, add the two `VITE_` variables from `.env.example`.
+- **GitHub:** push the folder to a repository and import it at vercel.com/new.
+
+Then add the two `VITE_` variables in Vercel (Settings, Environment Variables) if you haven't already.
+
+## Deploy the payment functions
+
+The three functions in `supabase/functions` must be deployed to Supabase before ticket buying works. Either run
+`supabase functions deploy create-checkout verify-payment` and `supabase functions deploy paystack-webhook --no-verify-jwt`
+(after `supabase link --project-ref ibvikjvicvbxgydynlir`), or paste each file into Edge Functions, then Deploy a new function,
+in the Supabase dashboard. Turn **Verify JWT** off for `paystack-webhook` only.
+
 ## Take payments (Paystack)
 
 Payments run in Supabase Edge Functions, so no secret ever reaches the browser or Vercel.
@@ -44,7 +73,7 @@ Until step 2 is done, free tickets work and paid tickets show "Online payments a
 ## Project layout
 
 ```
-client/src/pages        Home, EventPage, Login, Tickets, CheckoutComplete, Dashboard, NewEvent, ManageEvent
+client/src/pages        Home, EventPage, Login, ResetPassword, Tickets, CheckoutComplete, Dashboard, NewEvent, EditEvent, ManageEvent
 client/src/components   Layout, EventTicket (the ticket-stub card), RequireAuth
 client/src/lib          Supabase client, auth, formatting, types
 supabase/migrations     The database: tables, row-level security, order and ticket functions, image storage

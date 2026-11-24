@@ -86,6 +86,9 @@ function Manage({ id }: { id: string }) {
           <Link href={`/events/${event.slug}`} className="btn ghost small">
             View public page
           </Link>
+          <Link href={`/dashboard/events/${event.id}/edit`} className="btn ghost small">
+            Edit details
+          </Link>
           {event.status !== "published" ? (
             <button className="btn accent small" onClick={() => setStatus("published")}>
               Put on sale
